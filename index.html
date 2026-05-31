@@ -64,11 +64,14 @@
     }
     .nav-logo {
       font-family: var(--font-head);
-      font-size: 0.85rem;
-      letter-spacing: 0.2em;
-      color: var(--green);
-      text-transform: uppercase;
+      font-size: 1.4rem;
+      letter-spacing: 0;
+      color: var(--white);
+      line-height: 1;
+      text-decoration: none;
+      transition: color 200ms;
     }
+    .nav-logo:hover { color: var(--green); }
     .nav-links {
       display: flex;
       gap: 2.5rem;
@@ -616,7 +619,7 @@
 
   <!-- Nav -->
   <nav>
-    <div class="nav-logo">BD // Robotics</div>
+    <a href="#hero" class="nav-logo">Δ</a>
     <ul class="nav-links">
       <li><a href="#about">About</a></li>
       <li><a href="#publications">Publications</a></li>
@@ -661,7 +664,7 @@
         </a>
         <!-- Email -->
         <a href="mailto:baileydacre@gmail.com" aria-label="Email">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+          <svg viewBox="0 0 24 24" style="fill:none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
             <rect x="2" y="4" width="20" height="16" rx="2"/>
             <polyline points="2,4 12,13 22,4"/>
           </svg>
