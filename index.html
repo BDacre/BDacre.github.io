@@ -1,0 +1,1250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bailey Dacre — PhD Student, Robotics</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Orbitron:wght@700;900&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Design Tokens ─────────────────────────────────────────── */
+    :root {
+      --black:      #0d0d0d;
+      --white:      #f7f6f2;
+      --off-white:  #eeede8;
+      --green:      #228B22;
+      --green-dark: #1a6b1a;
+      --green-glow: rgba(34,139,34,0.2);
+      --text-main:  #0d0d0d;
+      --text-muted: #6b6b6b;
+      --border:     rgba(13,13,13,0.1);
+      --font-head: 'Orbitron', sans-serif;
+      --font-body: 'JetBrains Mono', monospace;
+    }
+
+    /* ── Reset ─────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--white);
+      color: var(--text-main);
+      font-family: var(--font-body);
+      font-size: 15px;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ── Hex Canvas (fixed background) ────────────────────────── */
+    #hex-canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* ── Layout wrapper ────────────────────────────────────────── */
+    .page {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── Nav ───────────────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.4rem 4rem;
+      border-bottom: 1px solid rgba(34,139,34,0.2);
+      background: rgba(13,13,13,0.92);
+      backdrop-filter: blur(12px);
+    }
+    .nav-logo {
+      font-family: var(--font-head);
+      font-size: 0.85rem;
+      letter-spacing: 0.2em;
+      color: var(--green);
+      text-transform: uppercase;
+    }
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+    .nav-links a {
+      font-family: var(--font-body);
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(247,246,242,0.55);
+      text-decoration: none;
+      transition: color 200ms;
+    }
+    .nav-links a:hover { color: var(--green); }
+
+    /* ── Hero ──────────────────────────────────────────────────── */
+    #hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      padding: 8rem 4rem 4rem;
+      gap: 4rem;
+    }
+    .hero-text { position: relative; }
+    .hero-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--green);
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .hero-label::before {
+      content: '';
+      display: block;
+      width: 28px;
+      height: 1px;
+      background: var(--green);
+    }
+    .hero-name {
+      font-family: var(--font-head);
+      font-size: clamp(3rem, 6vw, 6rem);
+      font-weight: 900;
+      line-height: 0.95;
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+      color: #0d0d0d;
+    }
+    .hero-name span { color: var(--green); }
+    .hero-role {
+      font-family: var(--font-body);
+      font-size: 0.78rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-top: 1.2rem;
+    }
+    .hero-desc {
+      margin-top: 2rem;
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      max-width: 420px;
+      line-height: 1.8;
+    }
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      margin-top: 2.8rem;
+      flex-wrap: wrap;
+    }
+    .btn-primary {
+      font-family: var(--font-body);
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      padding: 0.85rem 2rem;
+      background: var(--green);
+      color: var(--white);
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 200ms, transform 150ms;
+      display: inline-block;
+    }
+    .btn-primary:hover { background: var(--green-dark); transform: translateY(-2px); }
+    .btn-outline {
+      font-family: var(--font-body);
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      padding: 0.85rem 2rem;
+      background: transparent;
+      color: var(--black);
+      border: 1px solid rgba(13,13,13,0.3);
+      cursor: pointer;
+      text-decoration: none;
+      transition: border-color 200ms, color 200ms, transform 150ms;
+      display: inline-block;
+    }
+    .btn-outline:hover { border-color: var(--green); color: var(--green); transform: translateY(-2px); }
+
+    .hero-social {
+      display: flex;
+      gap: 1.2rem;
+      margin-top: 3rem;
+    }
+    .hero-social a {
+      width: 38px; height: 38px;
+      border: 1px solid rgba(13,13,13,0.15);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: border-color 200ms, color 200ms;
+    }
+    .hero-social a:hover { border-color: var(--green); color: var(--green); }
+    .hero-social svg { width: 16px; height: 16px; fill: currentColor; }
+
+    /* Profile block */
+    .hero-visual {
+      position: relative;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+    }
+    .profile-block {
+      position: relative;
+      width: 340px;
+    }
+    .profile-accent {
+      position: absolute;
+      bottom: 0; right: -24px;
+      width: 65%;
+      height: 55%;
+      background: var(--green);
+      z-index: 0;
+    }
+    .profile-photo {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      display: block;
+      filter: contrast(1.05);
+    }
+    .corner-tl, .corner-br {
+      position: absolute;
+      width: 20px; height: 20px;
+      z-index: 2;
+    }
+    .corner-tl {
+      top: -8px; left: -8px;
+      border-top: 2px solid var(--green);
+      border-left: 2px solid var(--green);
+    }
+    .corner-br {
+      bottom: -8px; right: -32px;
+      border-bottom: 2px solid var(--green);
+      border-right: 2px solid var(--green);
+    }
+    .hero-id-tag {
+      position: absolute;
+      bottom: 16px; left: -16px;
+      font-size: 0.62rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--green);
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+    }
+
+    /* ── Section shared ────────────────────────────────────────── */
+    section {
+      padding: 7rem 4rem;
+    }
+    .section-label {
+      font-size: 0.68rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--green);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .section-label::before {
+      content: '';
+      display: block;
+      width: 20px; height: 1px;
+      background: var(--green);
+    }
+    .section-title {
+      font-family: var(--font-head);
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+      line-height: 1;
+      color: var(--black);
+      margin-bottom: 3.5rem;
+    }
+    .section-title em {
+      font-style: normal;
+      color: var(--green);
+    }
+    .divider {
+      width: 100%;
+      height: 1px;
+      background: var(--border);
+      margin: 0;
+    }
+
+    /* ── About ─────────────────────────────────────────────────── */
+    #about {
+      background: rgba(238,237,232,0.75);
+    }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: start;
+    }
+    .about-bio {
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      line-height: 1.85;
+    }
+    .about-bio p + p { margin-top: 1.2rem; }
+    .about-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+    .stat-card {
+      border: 1px solid rgba(34,139,34,0.3);
+      padding: 1.4rem;
+      background: rgba(34,139,34,0.05);
+    }
+    .stat-value {
+      font-family: var(--font-head);
+      font-size: 2rem;
+      font-weight: 900;
+      color: var(--green);
+      line-height: 1;
+    }
+    .stat-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-top: 0.5rem;
+    }
+    .interest-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 2rem;
+    }
+    .tag {
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 0.35rem 0.85rem;
+      border: 1px solid rgba(34,139,34,0.35);
+      color: var(--green);
+      background: rgba(34,139,34,0.06);
+    }
+
+    /* ── Publications ──────────────────────────────────────────── */
+    #publications {
+      background: rgba(247,246,242,0.85);
+    }
+    .pub-list { display: flex; flex-direction: column; gap: 0; }
+    .pub-item {
+      display: grid;
+      grid-template-columns: 60px 1fr auto;
+      gap: 2rem;
+      align-items: start;
+      padding: 2rem 0;
+      border-bottom: 1px solid var(--border);
+      transition: background 200ms;
+      cursor: default;
+    }
+    .pub-item:first-child { border-top: 1px solid var(--border); }
+    .pub-item:hover { background: rgba(34,139,34,0.04); }
+    .pub-num {
+      font-family: var(--font-head);
+      font-size: 0.65rem;
+      color: var(--green);
+      letter-spacing: 0.1em;
+      padding-top: 4px;
+    }
+    .pub-body {}
+    .pub-title {
+      font-family: var(--font-body);
+      font-weight: 700;
+      font-size: 0.92rem;
+      color: var(--black);
+      line-height: 1.4;
+      margin-bottom: 0.4rem;
+    }
+    .pub-authors {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-bottom: 0.3rem;
+    }
+    .pub-venue {
+      font-size: 0.72rem;
+      color: var(--green);
+      letter-spacing: 0.08em;
+    }
+    .pub-links {
+      display: flex;
+      gap: 0.5rem;
+      padding-top: 4px;
+    }
+    .pub-link {
+      font-size: 0.62rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.7rem;
+      border: 1px solid rgba(13,13,13,0.2);
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: border-color 200ms, color 200ms;
+    }
+    .pub-link:hover { border-color: var(--green); color: var(--green); }
+    .pub-scholar-cta {
+      margin-top: 3rem;
+      text-align: center;
+    }
+
+    /* ── Projects ──────────────────────────────────────────────── */
+    #projects {
+      background: rgba(238,237,232,0.75);
+    }
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+    .proj-card {
+      border: 1px solid var(--border);
+      padding: 2rem;
+      background: rgba(247,246,242,0.7);
+      transition: border-color 250ms, background 250ms, transform 200ms;
+      position: relative;
+      overflow: hidden;
+    }
+    .proj-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 3px; height: 0;
+      background: var(--green);
+      transition: height 300ms;
+    }
+    .proj-card:hover {
+      border-color: rgba(34,139,34,0.4);
+      background: rgba(34,139,34,0.04);
+      transform: translateY(-4px);
+    }
+    .proj-card:hover::before { height: 100%; }
+    .proj-id {
+      font-size: 0.62rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--green);
+      margin-bottom: 1rem;
+    }
+    .proj-title {
+      font-family: var(--font-head);
+      font-size: 0.95rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--black);
+      margin-bottom: 0.8rem;
+      line-height: 1.3;
+    }
+    .proj-desc {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      line-height: 1.75;
+    }
+    .proj-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-top: 1.5rem;
+    }
+    .proj-tag {
+      font-size: 0.58rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.2rem 0.55rem;
+      background: rgba(34,139,34,0.1);
+      color: var(--green);
+    }
+
+    /* ── Interests ─────────────────────────────────────────────── */
+    #interests {
+      background: rgba(247,246,242,0.85);
+    }
+    .interests-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+    }
+    .interest-card {
+      padding: 2rem 1.5rem;
+      border: 1px solid var(--border);
+      background: rgba(238,237,232,0.5);
+      transition: border-color 250ms, background 250ms;
+    }
+    .interest-card:hover {
+      border-color: rgba(34,139,34,0.35);
+      background: rgba(34,139,34,0.05);
+    }
+    .interest-icon {
+      width: 32px; height: 32px;
+      color: var(--green);
+      margin-bottom: 1rem;
+    }
+    .interest-icon svg { width: 100%; height: 100%; stroke: currentColor; fill: none; stroke-width: 1.5; }
+    .interest-name {
+      font-family: var(--font-head);
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--black);
+      margin-bottom: 0.6rem;
+    }
+    .interest-desc {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+    }
+
+    /* ── Contact ───────────────────────────────────────────────── */
+    #contact {
+      background: rgba(238,237,232,0.75);
+    }
+    .contact-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6rem;
+      align-items: start;
+    }
+    .contact-text {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.85;
+    }
+    .contact-links {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .contact-link-row {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      padding: 1.2rem 1.5rem;
+      border: 1px solid var(--border);
+      text-decoration: none;
+      color: var(--black);
+      transition: border-color 250ms, background 250ms;
+      background: rgba(247,246,242,0.7);
+    }
+    .contact-link-row:hover {
+      border-color: var(--green);
+      background: rgba(34,139,34,0.05);
+    }
+    .contact-link-icon {
+      width: 18px; height: 18px;
+      color: var(--green);
+      flex-shrink: 0;
+    }
+    .contact-link-icon svg { width: 100%; height: 100%; stroke: currentColor; fill: none; stroke-width: 1.5; }
+    .contact-link-label {
+      font-family: var(--font-head);
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+    .contact-link-value {
+      font-size: 0.82rem;
+      color: var(--black);
+    }
+    .contact-link-row:hover .contact-link-value { color: var(--green); }
+
+    /* ── Footer ────────────────────────────────────────────────── */
+    footer {
+      padding: 2rem 4rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(238,237,232,0.9);
+    }
+    .footer-copy {
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+    .footer-tag {
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--green);
+    }
+
+    /* ── Scrollbar ─────────────────────────────────────────────── */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--off-white); }
+    ::-webkit-scrollbar-thumb { background: var(--green); }
+
+    /* ── Responsive ────────────────────────────────────────────── */
+    @media (max-width: 1024px) {
+      nav { padding: 1.2rem 2rem; }
+      #hero { padding: 7rem 2rem 3rem; gap: 2rem; }
+      section { padding: 5rem 2rem; }
+      .projects-grid { grid-template-columns: 1fr 1fr; }
+      .interests-grid { grid-template-columns: 1fr 1fr; }
+      footer { padding: 2rem; }
+    }
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      #hero { grid-template-columns: 1fr; padding: 6rem 1.5rem 3rem; }
+      .hero-visual { order: -1; justify-content: flex-start; }
+      .profile-block { width: 240px; }
+      .about-grid { grid-template-columns: 1fr; gap: 3rem; }
+      .projects-grid { grid-template-columns: 1fr; }
+      .interests-grid { grid-template-columns: 1fr 1fr; }
+      .contact-inner { grid-template-columns: 1fr; gap: 3rem; }
+      .pub-item { grid-template-columns: 40px 1fr; }
+      .pub-links { grid-column: 2; }
+      section { padding: 4rem 1.5rem; }
+    }
+
+    /* ── Reduced motion ────────────────────────────────────────── */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { transition: none !important; animation: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Hex lattice canvas -->
+<canvas id="hex-canvas" aria-hidden="true"></canvas>
+
+<div class="page">
+
+  <!-- Nav -->
+  <nav>
+    <div class="nav-logo">BD // Robotics</div>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#publications">Publications</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#interests">Interests</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- Hero -->
+  <section id="hero">
+    <div class="hero-text">
+      <div class="hero-label">PhD Student · University of Somewhere</div>
+      <h1 class="hero-name">Bailey<br/><span>Dacre</span></h1>
+      <p class="hero-role">Robotics &amp; Evolutionary Systems</p>
+      <p class="hero-desc">
+        Designing intelligence at the edge of chaos — multi-robot systems,
+        evolutionary algorithms, and the emergent complexity that arises when
+        many simple agents interact.
+      </p>
+      <div class="hero-actions">
+        <a href="#publications" class="btn-primary">Publications</a>
+        <a href="#projects" class="btn-outline">Projects</a>
+      </div>
+      <div class="hero-social">
+        <!-- GitHub -->
+        <a href="https://github.com/" target="_blank" rel="noopener" aria-label="GitHub">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.009-.868-.014-1.703-2.782.603-3.369-1.34-3.369-1.34-.454-1.155-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836c.85.004 1.705.114 2.504.337 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.202 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z"/>
+          </svg>
+        </a>
+        <!-- LinkedIn -->
+        <a href="https://linkedin.com/" target="_blank" rel="noopener" aria-label="LinkedIn">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M19 3a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h14m-.5 15.5v-5.3a3.26 3.26 0 00-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 011.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 001.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 00-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/>
+          </svg>
+        </a>
+        <!-- Google Scholar (graduation cap) -->
+        <a href="https://scholar.google.com/" target="_blank" rel="noopener" aria-label="Google Scholar">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M5.242 13.769L0 9.5 12 1l12 8.5-5.242 4.269C17.548 12.63 14.978 12 12 12c-2.978 0-5.548.63-6.758 1.769z"/>
+            <path d="M12 10a7 7 0 100 14 7 7 0 000-14z" fill-rule="evenodd" clip-rule="evenodd" opacity=".4"/>
+            <path d="M21 9.5V17l-1.5 1.5V9.5H21z"/>
+          </svg>
+        </a>
+        <!-- Email -->
+        <a href="mailto:baileydacre@gmail.com" aria-label="Email">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+            <polyline points="22,6 12,13 2,6"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <div class="profile-block">
+        <div class="profile-accent"></div>
+        <div class="corner-tl"></div>
+        <div class="corner-br"></div>
+        <img
+          src="Pictures/profile_no_background_b&w.jpg"
+          alt="Bailey Dacre"
+          class="profile-photo"
+        />
+        <div class="hero-id-tag">Robotics // Complexity // Evolution</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- About -->
+  <section id="about">
+    <div class="section-label">01 · About</div>
+    <h2 class="section-title">The <em>Research</em></h2>
+    <div class="about-grid">
+      <div>
+        <div class="about-bio">
+          <p>
+            I am a PhD student in Robotics at [University Name], working at the intersection
+            of multi-robot systems, evolutionary computation, and complex adaptive systems.
+            My research investigates how populations of robots can self-organise, adapt, and
+            collectively solve problems that are intractable for any single agent.
+          </p>
+          <p>
+            Drawing on evolutionary biology, dynamical systems theory, and machine learning,
+            I develop frameworks for understanding emergence in robot swarms — seeking
+            principles that hold across the boundary between the artificial and the natural.
+          </p>
+          <p>
+            Outside the lab I am fascinated by complexity science, synthetic biology,
+            and the deep connections between information, life, and intelligence.
+          </p>
+        </div>
+        <div class="interest-tags">
+          <span class="tag">Multi-Robot Systems</span>
+          <span class="tag">Evolutionary Robotics</span>
+          <span class="tag">Swarm Intelligence</span>
+          <span class="tag">Complex Systems</span>
+          <span class="tag">Artificial Life</span>
+          <span class="tag">Computational Biology</span>
+          <span class="tag">Emergence</span>
+          <span class="tag">Machine Learning</span>
+        </div>
+      </div>
+      <div class="about-stats">
+        <div class="stat-card">
+          <div class="stat-value">6+</div>
+          <div class="stat-label">Publications</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">3</div>
+          <div class="stat-label">Active Projects</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">2</div>
+          <div class="stat-label">Years PhD</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">∞</div>
+          <div class="stat-label">Curiosity</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Publications -->
+  <section id="publications">
+    <div class="section-label">02 · Research</div>
+    <h2 class="section-title">Publi<em>cations</em></h2>
+    <div class="pub-list">
+
+      <div class="pub-item">
+        <div class="pub-num">P-01</div>
+        <div class="pub-body">
+          <div class="pub-title">Criticality and Collective Computation in Heterogeneous Robot Swarms</div>
+          <div class="pub-authors">Dacre B., [Co-author A.], [Co-author B.]</div>
+          <div class="pub-venue">IEEE Transactions on Robotics · 2025</div>
+        </div>
+        <div class="pub-links">
+          <a href="#" class="pub-link">PDF</a>
+          <a href="#" class="pub-link">DOI</a>
+        </div>
+      </div>
+
+      <div class="pub-item">
+        <div class="pub-num">P-02</div>
+        <div class="pub-body">
+          <div class="pub-title">Evolutionary Morphogenesis in Modular Robot Populations</div>
+          <div class="pub-authors">Dacre B., [Co-author C.]</div>
+          <div class="pub-venue">GECCO 2024 · Best Paper Nominee</div>
+        </div>
+        <div class="pub-links">
+          <a href="#" class="pub-link">PDF</a>
+          <a href="#" class="pub-link">DOI</a>
+        </div>
+      </div>
+
+      <div class="pub-item">
+        <div class="pub-num">P-03</div>
+        <div class="pub-body">
+          <div class="pub-title">Phase Transitions in Distributed Robotic Decision-Making</div>
+          <div class="pub-authors">Dacre B., [Co-author A.], [Co-author D.]</div>
+          <div class="pub-venue">ALIFE 2024</div>
+        </div>
+        <div class="pub-links">
+          <a href="#" class="pub-link">PDF</a>
+          <a href="#" class="pub-link">DOI</a>
+        </div>
+      </div>
+
+      <div class="pub-item">
+        <div class="pub-num">P-04</div>
+        <div class="pub-body">
+          <div class="pub-title">Embodied Evolution Under Resource Constraints: A Multi-Population Study</div>
+          <div class="pub-authors">Dacre B., [Co-author B.], [Co-author E.]</div>
+          <div class="pub-venue">IROS 2023</div>
+        </div>
+        <div class="pub-links">
+          <a href="#" class="pub-link">PDF</a>
+          <a href="#" class="pub-link">DOI</a>
+        </div>
+      </div>
+
+      <div class="pub-item">
+        <div class="pub-num">P-05</div>
+        <div class="pub-body">
+          <div class="pub-title">Adaptive Communication Topologies in Self-Organising Multi-Robot Systems</div>
+          <div class="pub-authors">Dacre B., [Co-author F.]</div>
+          <div class="pub-venue">Swarm Intelligence Journal · 2023</div>
+        </div>
+        <div class="pub-links">
+          <a href="#" class="pub-link">PDF</a>
+          <a href="#" class="pub-link">DOI</a>
+        </div>
+      </div>
+
+    </div>
+    <div class="pub-scholar-cta">
+      <a href="https://scholar.google.com/" target="_blank" rel="noopener" class="btn-outline">
+        View All on Google Scholar
+      </a>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Projects -->
+  <section id="projects">
+    <div class="section-label">03 · Work</div>
+    <h2 class="section-title">Pro<em>jects</em></h2>
+    <div class="projects-grid">
+
+      <div class="proj-card">
+        <div class="proj-id">PRJ-001</div>
+        <div class="proj-title">SwarmEvo Framework</div>
+        <div class="proj-desc">
+          A Python framework for co-evolving robot controllers and morphologies
+          in simulated swarm environments. Supports heterogeneous populations
+          with configurable selection pressures and environmental challenges.
+        </div>
+        <div class="proj-tags">
+          <span class="proj-tag">Python</span>
+          <span class="proj-tag">Evolutionary Algorithms</span>
+          <span class="proj-tag">Simulation</span>
+        </div>
+      </div>
+
+      <div class="proj-card">
+        <div class="proj-id">PRJ-002</div>
+        <div class="proj-title">Criticality Monitor</div>
+        <div class="proj-desc">
+          Real-time tooling for measuring order parameters and susceptibility
+          in robot swarm experiments — detecting signatures of self-organised
+          criticality across distributed sensor networks.
+        </div>
+        <div class="proj-tags">
+          <span class="proj-tag">C++</span>
+          <span class="proj-tag">ROS2</span>
+          <span class="proj-tag">Complex Systems</span>
+        </div>
+      </div>
+
+      <div class="proj-card">
+        <div class="proj-id">PRJ-003</div>
+        <div class="proj-title">Embodied Evolution Testbed</div>
+        <div class="proj-desc">
+          Physical robot arena with 12 e-puck robots running on-board
+          evolutionary algorithms. Enables study of open-ended evolution
+          in hardware under realistic energy and communication constraints.
+        </div>
+        <div class="proj-tags">
+          <span class="proj-tag">Hardware</span>
+          <span class="proj-tag">e-puck</span>
+          <span class="proj-tag">Embedded Systems</span>
+        </div>
+      </div>
+
+      <div class="proj-card">
+        <div class="proj-id">PRJ-004</div>
+        <div class="proj-title">Neural Developmental Encoding</div>
+        <div class="proj-desc">
+          Investigating developmental encodings for robot neural architectures,
+          inspired by biological gene regulatory networks. Enables compact
+          genotype representations that generalise across morphologies.
+        </div>
+        <div class="proj-tags">
+          <span class="proj-tag">Neural Networks</span>
+          <span class="proj-tag">Developmental Biology</span>
+          <span class="proj-tag">Neuroevolution</span>
+        </div>
+      </div>
+
+      <div class="proj-card">
+        <div class="proj-id">PRJ-005</div>
+        <div class="proj-title">Open-Ended Ecology Simulator</div>
+        <div class="proj-desc">
+          A multi-agent simulation platform for studying ecological dynamics
+          in artificial environments — predator-prey coevolution, niche
+          construction, and the emergence of cooperation.
+        </div>
+        <div class="proj-tags">
+          <span class="proj-tag">Artificial Life</span>
+          <span class="proj-tag">Agent-Based Modelling</span>
+          <span class="proj-tag">Julia</span>
+        </div>
+      </div>
+
+      <div class="proj-card">
+        <div class="proj-id">PRJ-006</div>
+        <div class="proj-title">This Website</div>
+        <div class="proj-desc">
+          A personal portfolio built with vanilla HTML/CSS/JS. The background
+          simulates a stochastic spreading process on a hexagonal lattice —
+          a nod to criticality research and the beauty of complex systems.
+        </div>
+        <div class="proj-tags">
+          <span class="proj-tag">HTML/CSS</span>
+          <span class="proj-tag">Canvas API</span>
+          <span class="proj-tag">Criticality</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Interests -->
+  <section id="interests">
+    <div class="section-label">04 · Beyond the Lab</div>
+    <h2 class="section-title">Inter<em>ests</em></h2>
+    <div class="interests-grid">
+
+      <div class="interest-card">
+        <div class="interest-icon">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>
+        </div>
+        <div class="interest-name">Complex Systems</div>
+        <div class="interest-desc">Emergence, phase transitions, self-organisation, and the physics of information in living and artificial systems.</div>
+      </div>
+
+      <div class="interest-card">
+        <div class="interest-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        </div>
+        <div class="interest-name">Synthetic Biology</div>
+        <div class="interest-desc">Genetic circuits, protocells, and the engineering of biological systems — life as substrate for computation.</div>
+      </div>
+
+      <div class="interest-card">
+        <div class="interest-icon">
+          <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+        </div>
+        <div class="interest-name">Artificial Intelligence</div>
+        <div class="interest-desc">Reinforcement learning, large language models, and the hard questions around understanding, agency, and consciousness.</div>
+      </div>
+
+      <div class="interest-card">
+        <div class="interest-icon">
+          <svg viewBox="0 0 24 24"><path d="M3 3h7v7H3zM14 3h7v7h-7zM14 14h7v7h-7zM3 14h7v7H3z"/></svg>
+        </div>
+        <div class="interest-name">Evolutionary Biology</div>
+        <div class="interest-desc">Adaptation, arms races, major transitions, and the deep logic of natural selection as an optimisation process.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Contact -->
+  <section id="contact">
+    <div class="section-label">05 · Connect</div>
+    <h2 class="section-title">Get in <em>Touch</em></h2>
+    <div class="contact-inner">
+      <div>
+        <p class="contact-text">
+          I am always open to conversations about robotics research, collaboration
+          opportunities, PhD supervision questions, or just interesting ideas at the
+          boundary of biology, computation, and complexity.<br/><br/>
+          The best way to reach me is email or LinkedIn.
+        </p>
+      </div>
+      <div class="contact-links">
+        <a href="mailto:baileydacre@gmail.com" class="contact-link-row">
+          <div class="contact-link-icon">
+            <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          </div>
+          <div>
+            <div class="contact-link-label">Email</div>
+            <div class="contact-link-value">baileydacre@gmail.com</div>
+          </div>
+        </a>
+        <a href="https://linkedin.com/" target="_blank" rel="noopener" class="contact-link-row">
+          <div class="contact-link-icon">
+            <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+          </div>
+          <div>
+            <div class="contact-link-label">LinkedIn</div>
+            <div class="contact-link-value">linkedin.com/in/baileydacre</div>
+          </div>
+        </a>
+        <a href="https://github.com/" target="_blank" rel="noopener" class="contact-link-row">
+          <div class="contact-link-icon">
+            <svg viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg>
+          </div>
+          <div>
+            <div class="contact-link-label">GitHub</div>
+            <div class="contact-link-value">github.com/BDacre</div>
+          </div>
+        </a>
+        <a href="https://scholar.google.com/" target="_blank" rel="noopener" class="contact-link-row">
+          <div class="contact-link-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 14l9-5-9-5-9 5 9 5z"/><path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/></svg>
+          </div>
+          <div>
+            <div class="contact-link-label">Google Scholar</div>
+            <div class="contact-link-value">Bailey Dacre</div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-copy">&copy; 2026 Bailey Dacre</div>
+    <div class="footer-tag">// Multi-Robot Systems · Evolutionary Robotics · Complex Systems</div>
+  </footer>
+
+</div><!-- /.page -->
+
+<script>
+/* ================================================================
+   HEX LATTICE — stochastic firing / criticality simulation
+   Nodes are white circles (outlined). When they "fire" they fill black.
+   A fired node can propagate to neighbours with probability PROP_CHANCE.
+================================================================ */
+(function() {
+  const canvas = document.getElementById('hex-canvas');
+  const ctx    = canvas.getContext('2d');
+
+  /* ── Tunable parameters ───────────────────────────── */
+  const HEX_SIZE     = 44;      // px between node columns
+  const NODE_RADIUS  = 4.5;     // circle radius (px)
+  const FIRE_RATE    = 0.0008;  // probability per node per frame to spontaneously fire
+  const PROP_CHANCE  = 0.22;    // probability a fired node ignites each neighbour
+  const FIRE_DURATION = 38;     // frames a node stays fired (black)
+  const FADE_FRAMES   = 18;     // frames for the fade-out glow
+  const LINE_COLOR   = 'rgba(160,160,160,0.13)';
+  const NODE_OUTLINE = 'rgba(160,160,160,0.28)';
+  const NODE_FIRED   = 'rgba(34,139,34,0.5)';  /* subtle green pulse */
+  const NODE_FILL    = '#0a0a0a';  /* background — node becomes black */
+
+  /* ── Grid state ───────────────────────────────────── */
+  let nodes   = [];  // {x, y, col, row, fired: bool, timer: int, glow: float}
+  let cols, rows;
+  let W, H;
+
+  /* Hex grid: offset rows by half a column width */
+  function buildGrid() {
+    nodes = [];
+    W = canvas.width  = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+
+    const dx = HEX_SIZE;
+    const dy = HEX_SIZE * 0.866; // sqrt(3)/2
+
+    cols = Math.ceil(W / dx) + 2;
+    rows = Math.ceil(H / dy) + 2;
+
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        const x = c * dx + (r % 2 === 1 ? dx / 2 : 0) - dx;
+        const y = r * dy - dy;
+        nodes.push({ x, y, col: c, row: r, fired: false, timer: 0, glow: 0 });
+      }
+    }
+  }
+
+  /* Find neighbours (6 in hex grid) */
+  function neighbours(node) {
+    const even = node.row % 2 === 0;
+    const offsets = even
+      ? [[-1,0],[1,0],[0,-1],[0,1],[-1,-1],[-1,1]]
+      : [[-1,0],[1,0],[0,-1],[0,1],[1,-1],[1,1]];
+    return offsets.map(([dc, dr]) => {
+      const tc = node.col + dc;
+      const tr = node.row + dr;
+      if (tc < 0 || tr < 0 || tc >= cols || tr >= rows) return null;
+      return nodes[tr * cols + tc] || null;
+    }).filter(Boolean);
+  }
+
+  /* Fire a node */
+  function fireNode(node) {
+    if (node.fired) return;
+    node.fired = true;
+    node.timer = FIRE_DURATION;
+    node.glow  = 1.0;
+    /* Propagate */
+    for (const nb of neighbours(node)) {
+      if (!nb.fired && Math.random() < PROP_CHANCE) {
+        setTimeout(() => fireNode(nb), 60 + Math.random() * 80);
+      }
+    }
+  }
+
+  /* ── Draw ─────────────────────────────────────────── */
+  function drawLines() {
+    ctx.strokeStyle = LINE_COLOR;
+    ctx.lineWidth   = 0.8;
+    const dx = HEX_SIZE;
+    const dy = HEX_SIZE * 0.866;
+
+    for (const n of nodes) {
+      // Draw lines to right neighbour and lower-right neighbour only (avoid duplicates)
+      const right = nodes[n.row * cols + n.col + 1];
+      if (right) {
+        ctx.beginPath();
+        ctx.moveTo(n.x, n.y);
+        ctx.lineTo(right.x, right.y);
+        ctx.stroke();
+      }
+      const offsets = n.row % 2 === 0
+        ? [[-1,1],[0,1]]   // even row: diagonals go left-down and right-down
+        : [[0,1],[1,1]];   // odd row (shifted right): diagonals go left-down and right-down
+      for (const [dc, dr] of offsets) {
+        const tc = n.col + dc;
+        const tr = n.row + dr;
+        if (tc >= 0 && tr < rows && tc < cols) {
+          const nb = nodes[tr * cols + tc];
+          if (nb) {
+            ctx.beginPath();
+            ctx.moveTo(n.x, n.y);
+            ctx.lineTo(nb.x, nb.y);
+            ctx.stroke();
+          }
+        }
+      }
+    }
+  }
+
+  function drawNodes() {
+    for (const n of nodes) {
+      ctx.beginPath();
+      ctx.arc(n.x, n.y, NODE_RADIUS, 0, Math.PI * 2);
+
+      if (n.fired) {
+        /* Glow ring */
+        if (n.glow > 0) {
+          const grad = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, NODE_RADIUS * 4);
+          grad.addColorStop(0, `rgba(34,139,34,${0.45 * n.glow})`);
+          grad.addColorStop(1, 'rgba(34,139,34,0)');
+          ctx.fillStyle = grad;
+          ctx.arc(n.x, n.y, NODE_RADIUS * 4, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.beginPath();
+          ctx.arc(n.x, n.y, NODE_RADIUS, 0, Math.PI * 2);
+        }
+        /* Filled green disc */
+        ctx.fillStyle = NODE_FIRED;
+        ctx.fill();
+        ctx.strokeStyle = NODE_FIRED;
+        ctx.lineWidth   = 1.5;
+        ctx.stroke();
+      } else {
+        /* Unfired: outline only, no fill */
+        ctx.strokeStyle = NODE_OUTLINE;
+        ctx.lineWidth   = 1;
+        ctx.stroke();
+      }
+    }
+  }
+
+  /* ── Update ───────────────────────────────────────── */
+  function update() {
+    for (const n of nodes) {
+      /* Spontaneous firing */
+      if (!n.fired && Math.random() < FIRE_RATE) {
+        fireNode(n);
+      }
+      /* Countdown */
+      if (n.fired) {
+        n.timer--;
+        n.glow = Math.max(0, n.timer / FIRE_DURATION);
+        if (n.timer <= 0) {
+          n.fired = false;
+          n.glow  = 0;
+        }
+      }
+    }
+  }
+
+  /* ── Loop ─────────────────────────────────────────── */
+  function loop() {
+    ctx.clearRect(0, 0, W, H);
+    update();
+    drawLines();
+    drawNodes();
+    requestAnimationFrame(loop);
+  }
+
+  /* ── Init ─────────────────────────────────────────── */
+  buildGrid();
+  loop();
+
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(buildGrid, 150);
+  });
+
+  /* Mouse interaction — cursor raises local fire rate */
+  let mouseX = -9999, mouseY = -9999;
+  window.addEventListener('mousemove', e => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    /* Fire nearest node occasionally */
+    if (Math.random() < 0.08) {
+      let best = null, bestDist = 60;
+      for (const n of nodes) {
+        const d = Math.hypot(n.x - mouseX, n.y - mouseY);
+        if (d < bestDist) { bestDist = d; best = n; }
+      }
+      if (best) fireNode(best);
+    }
+  });
+
+})();
+</script>
+
+</body>
+</html>
