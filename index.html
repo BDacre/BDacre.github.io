@@ -89,10 +89,11 @@
     #hero {
       min-height: 100vh;
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      align-items: center;
-      padding: 8rem 4rem 4rem;
-      gap: 4rem;
+      align-items: end;
+      padding: 8rem 0 0 4rem;
+      gap: 2rem;
+      overflow: hidden;
+      grid-template-columns: 1fr 1.1fr;
     }
     .hero-text { position: relative; }
     .hero-label {
@@ -114,11 +115,11 @@
     }
     .hero-name {
       font-family: var(--font-head);
-      font-size: clamp(3rem, 6vw, 6rem);
+      font-size: clamp(4rem, 8.5vw, 9rem);
       font-weight: 900;
-      line-height: 0.95;
+      line-height: 0.9;
       text-transform: uppercase;
-      letter-spacing: -0.02em;
+      letter-spacing: -0.03em;
       color: #0d0d0d;
     }
     .hero-name span { color: var(--green); }
@@ -192,22 +193,33 @@
 
     /* Profile block */
     .hero-visual {
-      position: relative;
       display: flex;
+      flex-direction: column;
       align-items: flex-end;
-      justify-content: center;
+      justify-content: flex-end;
+      overflow: hidden;
     }
+    .hero-annotation {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 0.3rem;
+      padding: 0 1.5rem 1.5rem 0;
+      font-size: 0.62rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(13,13,13,0.5);
+      font-family: var(--font-body);
+      text-align: right;
+      pointer-events: none;
+      flex-shrink: 0;
+      width: 100%;
+    }
+    .hero-anno-divider { display: none; }
     .profile-block {
       position: relative;
-      width: 340px;
-    }
-    .profile-accent {
-      position: absolute;
-      bottom: 0; right: -24px;
-      width: 65%;
-      height: 55%;
-      background: var(--green);
-      z-index: 0;
+      width: 100%;
+      flex-shrink: 0;
     }
     .profile-photo {
       position: relative;
@@ -215,31 +227,7 @@
       width: 100%;
       display: block;
       filter: contrast(1.05);
-    }
-    .corner-tl, .corner-br {
-      position: absolute;
-      width: 20px; height: 20px;
-      z-index: 2;
-    }
-    .corner-tl {
-      top: -8px; left: -8px;
-      border-top: 2px solid var(--green);
-      border-left: 2px solid var(--green);
-    }
-    .corner-br {
-      bottom: -8px; right: -32px;
-      border-bottom: 2px solid var(--green);
-      border-right: 2px solid var(--green);
-    }
-    .hero-id-tag {
-      position: absolute;
-      bottom: 16px; left: -16px;
-      font-size: 0.62rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--green);
-      writing-mode: vertical-rl;
-      transform: rotate(180deg);
+      object-fit: cover;
     }
 
     /* ── Section shared ────────────────────────────────────────── */
@@ -289,9 +277,8 @@
     }
     .about-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 5rem;
-      align-items: start;
+      grid-template-columns: 1fr;
+      max-width: 720px;
     }
     .about-bio {
       font-size: 0.92rem;
@@ -604,7 +591,7 @@
       .nav-links { display: none; }
       #hero { grid-template-columns: 1fr; padding: 6rem 1.5rem 3rem; }
       .hero-visual { order: -1; justify-content: flex-start; }
-      .profile-block { width: 240px; }
+      .profile-block { width: 100%; }
       .about-grid { grid-template-columns: 1fr; gap: 3rem; }
       .projects-grid { grid-template-columns: 1fr; }
       .interests-grid { grid-template-columns: 1fr 1fr; }
@@ -642,13 +629,10 @@
   <!-- Hero -->
   <section id="hero">
     <div class="hero-text">
-      <div class="hero-label">PhD Student · University of Somewhere</div>
+      <div class="hero-label">PhD Student · IT University of Copenhagen</div>
       <h1 class="hero-name">Bailey<br/><span>Dacre</span></h1>
-      <p class="hero-role">Robotics &amp; Evolutionary Systems</p>
       <p class="hero-desc">
-        Designing intelligence at the edge of chaos — multi-robot systems,
-        evolutionary algorithms, and the emergent complexity that arises when
-        many simple agents interact.
+        Multi-robot systems, Decentralization, Bio-inspired robotics.
       </p>
       <div class="hero-actions">
         <a href="#publications" class="btn-primary">Publications</a>
@@ -686,16 +670,21 @@
     </div>
 
     <div class="hero-visual">
+      <div class="hero-annotation">
+        <span>Multi-Robot Systems</span>
+        <span class="hero-anno-divider">·</span>
+        <span>Evolutionary Robotics</span>
+        <span class="hero-anno-divider">·</span>
+        <span>Complex Systems</span>
+        <span class="hero-anno-divider">·</span>
+        <span>PhD 2026</span>
+      </div>
       <div class="profile-block">
-        <div class="profile-accent"></div>
-        <div class="corner-tl"></div>
-        <div class="corner-br"></div>
         <img
-          src="Pictures/profile_no_background_b&w.jpg"
+          src="Pictures/profile_bar.png"
           alt="Bailey Dacre"
           class="profile-photo"
         />
-        <div class="hero-id-tag">Robotics // Complexity // Evolution</div>
       </div>
     </div>
   </section>
@@ -710,15 +699,15 @@
       <div>
         <div class="about-bio">
           <p>
-            I am a PhD student in Robotics at [University Name], working at the intersection
-            of multi-robot systems, evolutionary computation, and complex adaptive systems.
-            My research investigates how populations of robots can self-organise, adapt, and
-            collectively solve problems that are intractable for any single agent.
+	
+			Hi. I am Bailey, a third year PhD student at The IT University of Copenhagen. I work as part of the REAL Lab, am advised by Prof. Andres Feina and Prof Kasper Stoy. 
+			Previously, I completed my Masters in Bioengineering from University of Sheffield.
+
           </p>
           <p>
-            Drawing on evolutionary biology, dynamical systems theory, and machine learning,
-            I develop frameworks for understanding emergence in robot swarms — seeking
-            principles that hold across the boundary between the artificial and the natural.
+		  My research interests lie in the intersection of robot design and robot learning. 
+		  I am particularly interested in decentralized systems,and taking inspiration 
+		  from biology to solve problems through use of purely local interacions.
           </p>
           <p>
             Outside the lab I am fascinated by complexity science, synthetic biology,
@@ -734,24 +723,6 @@
           <span class="tag">Computational Biology</span>
           <span class="tag">Emergence</span>
           <span class="tag">Machine Learning</span>
-        </div>
-      </div>
-      <div class="about-stats">
-        <div class="stat-card">
-          <div class="stat-value">6+</div>
-          <div class="stat-label">Publications</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-value">3</div>
-          <div class="stat-label">Active Projects</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-value">2</div>
-          <div class="stat-label">Years PhD</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-value">∞</div>
-          <div class="stat-label">Curiosity</div>
         </div>
       </div>
     </div>
