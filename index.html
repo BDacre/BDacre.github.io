@@ -1044,6 +1044,209 @@
     <div class="footer-tag">// Multi-Robot Systems · Evolutionary Robotics · Complex Systems</div>
   </footer>
 
+<!-- Criticality control panel -->
+<div id="ctrl-toggle" aria-label="Open simulation controls" role="button" tabindex="0">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/><line x1="4" y1="5" x2="10.5" y2="5"/><line x1="13.5" y1="5" x2="20" y2="5"/><line x1="4" y1="12" x2="10.5" y2="12"/><line x1="13.5" y1="12" x2="20" y2="12"/><line x1="4" y1="19" x2="10.5" y2="19"/><line x1="13.5" y1="19" x2="20" y2="19"/></svg>
+</div>
+
+<div id="ctrl-panel" aria-label="Simulation controls">
+  <div class="ctrl-header">
+    <span class="ctrl-title">Lattice Controls</span>
+    <button class="ctrl-close" aria-label="Close">✕</button>
+  </div>
+
+  <div class="ctrl-regime" id="regime-label">CRITICAL</div>
+  <div class="ctrl-regime-desc" id="regime-desc">Avalanches of all sizes — power-law distributed</div>
+
+  <div class="ctrl-row">
+    <div class="ctrl-label-row">
+      <span class="ctrl-param">Branching Ratio σ</span>
+      <span class="ctrl-val" id="sigma-val">1.32</span>
+    </div>
+    <input type="range" id="sigma-slider" min="0" max="3" step="0.01" value="1.32" />
+    <div class="ctrl-tick-row">
+      <span>0</span><span style="position:absolute;left:calc(33.3% - 4px)">σ=1</span><span>3</span>
+    </div>
+  </div>
+
+  <div class="ctrl-row">
+    <div class="ctrl-label-row">
+      <span class="ctrl-param">Fire Rate</span>
+      <span class="ctrl-val" id="fire-val">10 seeds/s</span>
+    </div>
+    <input type="range" id="fire-slider" min="1" max="120" step="1" value="10" />
+    <div class="ctrl-tick-row">
+      <span>1 seeds/s</span><span>120 seeds/s</span>
+    </div>
+    <div class="ctrl-subtext">spontaneous seeds / sec across grid</div>
+  </div>
+</div>
+
+<style>
+  #ctrl-toggle {
+    position: fixed;
+    bottom: 2rem; right: 2rem;
+    z-index: 200;
+    width: 42px; height: 42px;
+    background: #0d0d0d;
+    border: 1px solid rgba(34,139,34,0.4);
+    color: rgba(247,246,242,0.6);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    transition: border-color 200ms, color 200ms;
+  }
+  #ctrl-toggle:hover { border-color: var(--green); color: var(--green); }
+  #ctrl-toggle svg { width: 18px; height: 18px; }
+
+  #ctrl-panel {
+    position: fixed;
+    bottom: 5rem; right: 2rem;
+    z-index: 200;
+    width: 280px;
+    background: var(--white);
+    border: 1px solid rgba(13,13,13,0.12);
+    box-shadow: 0 8px 32px rgba(13,13,13,0.12);
+    font-family: var(--font-body);
+    transform: translateY(12px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 200ms, transform 200ms;
+    overflow: hidden;
+  }
+  #ctrl-panel.open {
+    opacity: 1;
+    pointer-events: all;
+    transform: translateY(0);
+  }
+
+  .ctrl-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.85rem 1.2rem;
+    background: var(--black);
+  }
+  .ctrl-title {
+    font-family: var(--font-head);
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--green);
+  }
+  .ctrl-close {
+    background: none; border: none;
+    color: rgba(247,246,242,0.4);
+    cursor: pointer; font-size: 0.75rem;
+    padding: 0; line-height: 1;
+    transition: color 150ms;
+  }
+  .ctrl-close:hover { color: var(--green); }
+
+  /* body padding below the black header */
+  #ctrl-panel .ctrl-regime,
+  #ctrl-panel .ctrl-regime-desc,
+  #ctrl-panel .ctrl-row,
+  #ctrl-panel .ctrl-branch {
+    padding-left: 1.2rem;
+    padding-right: 1.2rem;
+  }
+
+  .ctrl-regime {
+    font-family: var(--font-head);
+    font-size: 1.1rem;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    color: var(--green);
+    margin-top: 1.2rem;
+    margin-bottom: 0.3rem;
+  }
+  .ctrl-regime.sub    { color: #999; }
+  .ctrl-regime.super  { color: #c0392b; }
+
+  .ctrl-regime-desc {
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    margin-bottom: 1.4rem;
+    line-height: 1.5;
+    letter-spacing: 0.03em;
+  }
+
+  .ctrl-row { margin-bottom: 1.2rem; }
+  .ctrl-label-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.4rem;
+  }
+  .ctrl-param {
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  .ctrl-val {
+    font-size: 0.65rem;
+    color: var(--green);
+    font-variant-numeric: tabular-nums;
+  }
+
+  input[type=range] {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 2px;
+    background: rgba(13,13,13,0.12);
+    outline: none;
+    cursor: pointer;
+  }
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    background: var(--green);
+    cursor: pointer;
+    transition: transform 150ms;
+  }
+  input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.3); }
+
+  .ctrl-tick-row {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.58rem;
+    color: rgba(13,13,13,0.3);
+    margin-top: 0.3rem;
+  }
+
+  .ctrl-branch {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 0.8rem;
+    padding-bottom: 1.2rem;
+    border-top: 1px solid rgba(13,13,13,0.08);
+    margin-top: 0.2rem;
+  }
+  .ctrl-branch-label {
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  .ctrl-branch-val {
+    font-family: var(--font-head);
+    font-size: 0.85rem;
+    color: var(--green);
+  }
+  .ctrl-branch-val.sub   { color: #999; }
+  .ctrl-branch-val.super { color: #c0392b; }
+
+  .ctrl-subtext {
+    font-size: 0.6rem;
+    color: rgba(13,13,13,0.35);
+    letter-spacing: 0.05em;
+    margin-top: 0.35rem;
+  }
+</style>
+
 </div><!-- /.page -->
 
 <script>
@@ -1059,8 +1262,8 @@
   /* ── Tunable parameters ───────────────────────────── */
   const HEX_SIZE     = 44;      // px between node columns
   const NODE_RADIUS  = 4.5;     // circle radius (px)
-  const FIRE_RATE    = 0.0008;  // probability per node per frame to spontaneously fire
-  const PROP_CHANCE  = 0.22;    // probability a fired node ignites each neighbour
+  let   FIRE_RATE    = 0.0008;  // probability per node per frame to spontaneously fire
+  let   PROP_CHANCE  = 0.22;    // probability a fired node ignites each neighbour
   const FIRE_DURATION = 38;     // frames a node stays fired (black)
   const FADE_FRAMES   = 18;     // frames for the fade-out glow
   const LINE_COLOR   = 'rgba(160,160,160,0.13)';
@@ -1114,9 +1317,10 @@
     node.fired = true;
     node.timer = FIRE_DURATION;
     node.glow  = 1.0;
-    /* Propagate */
+    /* Propagate — read live slider value if set */
+    const liveProp = window._PROP_CHANCE !== undefined ? window._PROP_CHANCE : PROP_CHANCE;
     for (const nb of neighbours(node)) {
-      if (!nb.fired && Math.random() < PROP_CHANCE) {
+      if (!nb.fired && Math.random() < liveProp) {
         setTimeout(() => fireNode(nb), 60 + Math.random() * 80);
       }
     }
@@ -1192,8 +1396,9 @@
   /* ── Update ───────────────────────────────────────── */
   function update() {
     for (const n of nodes) {
-      /* Spontaneous firing */
-      if (!n.fired && Math.random() < FIRE_RATE) {
+      /* Spontaneous firing — read live slider value if set */
+      const liveRate = window._FIRE_RATE !== undefined ? window._FIRE_RATE : FIRE_RATE;
+      if (!n.fired && Math.random() < liveRate) {
         fireNode(n);
       }
       /* Countdown */
@@ -1219,12 +1424,13 @@
 
   /* ── Init ─────────────────────────────────────────── */
   buildGrid();
+  window._nodeCount = nodes.length;
   loop();
 
   let resizeTimer;
   window.addEventListener('resize', () => {
     clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(buildGrid, 150);
+    resizeTimer = setTimeout(() => { buildGrid(); window._nodeCount = nodes.length; }, 150);
   });
 
   /* Mouse interaction — cursor raises local fire rate */
@@ -1243,6 +1449,68 @@
     }
   });
 
+})();
+
+/* ── Control panel ─────────────────────────────────── */
+(function() {
+  const CRITICAL    = 1 / 6;
+  const TOLERANCE   = 0.02;
+
+  const toggle      = document.getElementById('ctrl-toggle');
+  const panel       = document.getElementById('ctrl-panel');
+  const closeBtn    = panel.querySelector('.ctrl-close');
+  const sigmaSlider = document.getElementById('sigma-slider');
+  const fireSlider  = document.getElementById('fire-slider');
+  const sigmaVal    = document.getElementById('sigma-val');
+  const fireVal     = document.getElementById('fire-val');
+  const regimeLabel = document.getElementById('regime-label');
+  const regimeDesc  = document.getElementById('regime-desc');
+
+  function openPanel()  { panel.classList.add('open'); }
+  function closePanel() { panel.classList.remove('open'); }
+
+  toggle.addEventListener('click', () => panel.classList.toggle('open'));
+  toggle.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') panel.classList.toggle('open'); });
+  closeBtn.addEventListener('click', closePanel);
+
+  function updateRegime(sigma) {
+    sigmaVal.textContent = sigma.toFixed(2);
+    window._PROP_CHANCE  = sigma / 6;
+
+    if (Math.abs(sigma - 1) <= TOLERANCE * 6) {
+      regimeLabel.textContent = 'CRITICAL';
+      regimeLabel.className   = 'ctrl-regime';
+      regimeDesc.textContent  = 'Avalanches of all sizes — power-law distributed';
+    } else if (sigma < 1) {
+      regimeLabel.textContent = 'SUB-CRITICAL';
+      regimeLabel.className   = 'ctrl-regime sub';
+      regimeDesc.textContent  = 'Cascades die out quickly — activity is sparse';
+    } else {
+      regimeLabel.textContent = 'SUPER-CRITICAL';
+      regimeLabel.className   = 'ctrl-regime super';
+      regimeDesc.textContent  = 'Runaway cascades — activity spreads without bound';
+    }
+  }
+
+  sigmaSlider.addEventListener('input', () => {
+    updateRegime(parseFloat(sigmaSlider.value));
+  });
+
+  fireSlider.addEventListener('input', () => {
+    const hz = parseFloat(fireSlider.value);
+    const nodeCount = window._nodeCount || 1000;
+    window._FIRE_RATE = hz / (nodeCount * 60);
+    fireVal.textContent = hz + ' seeds/s';
+  });
+
+  /* Set initial fire rate from default slider value */
+  (function() {
+    const hz = parseFloat(fireSlider.value);
+    const nodeCount = window._nodeCount || 1000;
+    window._FIRE_RATE = hz / (nodeCount * 60);
+  })();
+
+  updateRegime(parseFloat(sigmaSlider.value));
 })();
 </script>
 
