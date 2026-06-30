@@ -276,12 +276,15 @@
 
     /* ── About ─────────────────────────────────────────────────── */
     #about {
-      background: rgba(238,237,232,0.75);
+      background: transparent;
     }
     .about-grid {
       display: grid;
       grid-template-columns: 1fr;
       max-width: 720px;
+      background: rgba(247,246,242,0.9);
+      border: 1px solid var(--border);
+      padding: 2.5rem;
     }
     .about-bio {
       font-size: 0.92rem;
@@ -331,21 +334,21 @@
 
     /* ── Publications ──────────────────────────────────────────── */
     #publications {
-      background: rgba(247,246,242,0.85);
+      background: transparent;
     }
-    .pub-list { display: flex; flex-direction: column; gap: 0; }
+    .pub-list { display: flex; flex-direction: column; gap: 0.6rem; }
     .pub-item {
       display: grid;
       grid-template-columns: 60px 1fr auto;
       gap: 2rem;
       align-items: start;
-      padding: 2rem 0;
-      border-bottom: 1px solid var(--border);
-      transition: background 200ms;
+      padding: 1.6rem 1.8rem;
+      border: 1px solid var(--border);
+      background: rgba(247,246,242,0.9);
+      transition: background 200ms, border-color 200ms;
       cursor: default;
     }
-    .pub-item:first-child { border-top: 1px solid var(--border); }
-    .pub-item:hover { background: rgba(34,139,34,0.04); }
+    .pub-item:hover { background: rgba(247,246,242,0.97); border-color: rgba(34,139,34,0.4); }
     .pub-num {
       font-family: var(--font-head);
       font-size: 0.65rem;
@@ -395,7 +398,7 @@
 
     /* ── Projects ──────────────────────────────────────────────── */
     #projects {
-      background: rgba(238,237,232,0.75);
+      background: transparent;
     }
     .projects-grid {
       display: grid;
@@ -405,7 +408,7 @@
     .proj-card {
       border: 1px solid var(--border);
       padding: 2rem;
-      background: rgba(247,246,242,0.7);
+      background: rgba(247,246,242,0.9);
       transition: border-color 250ms, background 250ms, transform 200ms;
       position: relative;
       overflow: hidden;
@@ -462,7 +465,7 @@
 
     /* ── Interests ─────────────────────────────────────────────── */
     #interests {
-      background: rgba(247,246,242,0.85);
+      background: transparent;
     }
     .interests-grid {
       display: grid;
@@ -472,7 +475,7 @@
     .interest-card {
       padding: 2rem 1.5rem;
       border: 1px solid var(--border);
-      background: rgba(238,237,232,0.5);
+      background: rgba(247,246,242,0.9);
       transition: border-color 250ms, background 250ms;
     }
     .interest-card:hover {
@@ -502,7 +505,7 @@
 
     /* ── Contact ───────────────────────────────────────────────── */
     #contact {
-      background: rgba(238,237,232,0.75);
+      background: transparent;
     }
     .contact-inner {
       display: grid;
@@ -514,6 +517,9 @@
       font-size: 0.88rem;
       color: var(--text-muted);
       line-height: 1.85;
+      background: rgba(247,246,242,0.9);
+      border: 1px solid var(--border);
+      padding: 2rem;
     }
     .contact-links {
       display: flex;
@@ -529,7 +535,7 @@
       text-decoration: none;
       color: var(--black);
       transition: border-color 250ms, background 250ms;
-      background: rgba(247,246,242,0.7);
+      background: rgba(247,246,242,0.9);
     }
     .contact-link-row:hover {
       border-color: var(--green);
@@ -684,7 +690,7 @@
       </div>
       <div class="profile-block">
         <img
-          src="Pictures/profile_bar.png"
+          src="Pictures/profile_no_background_b&w.png"
           alt="Bailey Dacre"
           class="profile-photo"
         />
@@ -703,14 +709,14 @@
         <div class="about-bio">
           <p>
 	
-			Hi. I am Bailey, a third year PhD student at The IT University of Copenhagen. I work as part of the REAL Lab, am advised by Prof. Andres Faíña and Prof Kasper Stoy. 
+			Hi. I am Bailey, a third year PhD student at The IT University of Copenhagen. I work as part of the REAL Lab, am advised by Prof. Andres Faíña and Prof. Kasper Stoy.
 			Previously, I completed my Masters in Bioengineering from University of Sheffield.
 
           </p>
           <p>
 		  My research interests lie in the intersection of robot design and robot learning. 
-		  I am particularly interested in decentralized systems,and taking inspiration 
-		  from biology to solve problems through use of purely local interacions.
+		  I am particularly interested in decentralized systems, and taking inspiration
+		  from biology to solve problems through use of purely local interactions.
           </p>
           <p>
             Outside the lab I am fascinated by complexity science, synthetic biology,
