@@ -87,6 +87,26 @@
       transition: color 200ms;
     }
     .nav-links a:hover { color: var(--green); }
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      width: 32px; height: 32px;
+      padding: 4px;
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+    .nav-toggle span {
+      display: block;
+      width: 22px; height: 2px;
+      background: rgba(247,246,242,0.85);
+      transition: transform 200ms, opacity 200ms;
+    }
+    .nav-toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .nav-toggle.open span:nth-child(2) { opacity: 0; }
+    .nav-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
     /* ── Hero ──────────────────────────────────────────────────── */
     #hero {
@@ -606,7 +626,22 @@
       footer { padding: 2rem; }
     }
     @media (max-width: 768px) {
-      .nav-links { display: none; }
+      .nav-toggle { display: flex; }
+      .nav-links {
+        position: absolute;
+        top: 100%; left: 0; right: 0;
+        flex-direction: column;
+        gap: 0;
+        background: rgba(13,13,13,0.97);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(34,139,34,0.2);
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 250ms ease;
+      }
+      .nav-links.open { max-height: 320px; }
+      .nav-links li { border-top: 1px solid rgba(247,246,242,0.08); }
+      .nav-links a { display: block; padding: 1rem 2rem; font-size: 0.8rem; }
       #hero { height: auto; grid-template-columns: 1fr; padding: 6rem 1.5rem 3rem; }
       .hero-visual { order: -1; justify-content: flex-start; }
       .hero-annotation { position: static; margin: 0 0 1rem auto; }
@@ -618,6 +653,11 @@
       .pub-item { grid-template-columns: 40px 1fr; }
       .pub-links { grid-column: 2; }
       section { padding: 4rem 1.5rem; }
+    }
+    @media (max-width: 600px) {
+      .interests-grid { grid-template-columns: 1fr; }
+      .about-grid { padding: 1.75rem; }
+      .contact-text { padding: 1.5rem; }
     }
 
     /* ── Reduced motion ────────────────────────────────────────── */
@@ -636,6 +676,9 @@
   <!-- Nav -->
   <nav>
     <a href="#hero" class="nav-logo">Δ</a>
+    <button class="nav-toggle" aria-label="Menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
     <ul class="nav-links">
       <li><a href="#about">About</a></li>
       <li><a href="#publications">Publications</a></li>
@@ -972,7 +1015,7 @@
   </div>
 
   <div class="ctrl-intro">
-    A stochastic spreading process on a hexagonal lattice — each node can spontaneously fire and propagate to its neighbours. Tune the branching ratio to explore criticality.
+    The sites background is a stochastic, neural inspired design — each node can spontaneously fire and then propagate to its neighbours. Tune the branching ratio to explore the idea of criticality visually.
   </div>
 
   <div class="ctrl-regime" id="regime-label">CRITICAL</div>
@@ -1379,6 +1422,24 @@
     }
   });
 
+})();
+
+/* ── Mobile nav toggle ─────────────────────────────── */
+(function() {
+  const toggle = document.querySelector('.nav-toggle');
+  const links  = document.querySelector('.nav-links');
+  if (!toggle || !links) return;
+  function close() {
+    links.classList.remove('open');
+    toggle.classList.remove('open');
+    toggle.setAttribute('aria-expanded', 'false');
+  }
+  toggle.addEventListener('click', () => {
+    const open = links.classList.toggle('open');
+    toggle.classList.toggle('open', open);
+    toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+  links.querySelectorAll('a').forEach(a => a.addEventListener('click', close));
 })();
 
 /* ── Control panel ─────────────────────────────────── */
