@@ -90,7 +90,8 @@
 
     /* ── Hero ──────────────────────────────────────────────────── */
     #hero {
-      min-height: 100vh;
+      height: 100vh;
+      position: relative;
       display: grid;
       align-items: end;
       padding: 8rem 0 0 4rem;
@@ -203,11 +204,14 @@
       overflow: hidden;
     }
     .hero-annotation {
+      position: absolute;
+      top: 6rem;
+      right: 2rem;
+      z-index: 3;
       display: flex;
       flex-direction: column;
       align-items: flex-end;
       gap: 0.3rem;
-      padding: 0 1.5rem 1.5rem 0;
       font-size: 0.62rem;
       letter-spacing: 0.18em;
       text-transform: uppercase;
@@ -215,8 +219,6 @@
       font-family: var(--font-body);
       text-align: right;
       pointer-events: none;
-      flex-shrink: 0;
-      width: 100%;
     }
     .hero-anno-divider { display: none; }
     .profile-block {
@@ -263,6 +265,14 @@
       color: var(--black);
       margin-bottom: 3.5rem;
     }
+    .section-intro {
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      line-height: 1.85;
+      max-width: 720px;
+      margin-top: -2rem;
+      margin-bottom: 3rem;
+    }
     .section-title em {
       font-style: normal;
       color: var(--green);
@@ -281,7 +291,6 @@
     .about-grid {
       display: grid;
       grid-template-columns: 1fr;
-      max-width: 720px;
       background: rgba(247,246,242,0.9);
       border: 1px solid var(--border);
       padding: 2.5rem;
@@ -598,8 +607,9 @@
     }
     @media (max-width: 768px) {
       .nav-links { display: none; }
-      #hero { grid-template-columns: 1fr; padding: 6rem 1.5rem 3rem; }
+      #hero { height: auto; grid-template-columns: 1fr; padding: 6rem 1.5rem 3rem; }
       .hero-visual { order: -1; justify-content: flex-start; }
+      .hero-annotation { position: static; margin: 0 0 1rem auto; }
       .profile-block { width: 100%; }
       .about-grid { grid-template-columns: 1fr; gap: 3rem; }
       .projects-grid { grid-template-columns: 1fr; }
@@ -649,13 +659,13 @@
       </div>
       <div class="hero-social">
         <!-- GitHub -->
-        <a href="https://github.com/" target="_blank" rel="noopener" aria-label="GitHub">
+        <a href="https://github.com/BDacre/" target="_blank" rel="noopener" aria-label="GitHub">
           <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.009-.868-.014-1.703-2.782.603-3.369-1.34-3.369-1.34-.454-1.155-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836c.85.004 1.705.114 2.504.337 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.202 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z"/>
           </svg>
         </a>
         <!-- LinkedIn -->
-        <a href="https://linkedin.com/" target="_blank" rel="noopener" aria-label="LinkedIn">
+        <a href="https://www.linkedin.com/in/bailey-dacre/" target="_blank" rel="noopener" aria-label="LinkedIn">
           <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path d="M19 3a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h14m-.5 15.5v-5.3a3.26 3.26 0 00-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 011.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 001.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 00-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/>
           </svg>
@@ -684,7 +694,7 @@
         <span class="hero-anno-divider">·</span>
         <span>Evolutionary Robotics</span>
         <span class="hero-anno-divider">·</span>
-        <span>World Models</span>
+        <span>Distributed Systems</span>
         <span class="hero-anno-divider">·</span>
         <span>PhD 2026</span>
       </div>
@@ -702,8 +712,8 @@
 
   <!-- About -->
   <section id="about">
-    <div class="section-label">01 · About</div>
-    <h2 class="section-title">The <em>Research</em></h2>
+    <div class="section-label">01 ·</div>
+    <h2 class="section-title">About <em>Me</em></h2>
     <div class="about-grid">
       <div>
         <div class="about-bio">
@@ -725,12 +735,9 @@
         <div class="interest-tags">
           <span class="tag">Multi-Robot Systems</span>
           <span class="tag">Evolutionary Robotics</span>
-          <span class="tag">Swarm Intelligence</span>
-          <span class="tag">Complex Systems</span>
-          <span class="tag">Artificial Life</span>
-          <span class="tag">Computational Biology</span>
-          <span class="tag">Emergence</span>
-          <span class="tag">Machine Learning</span>
+          <span class="tag">Distribted Systems</span>
+          <span class="tag">Robotic Design</span>
+          <span class="tag">Artifical- Intelligence</span>
         </div>
       </div>
     </div>
@@ -740,8 +747,8 @@
 
   <!-- Publications -->
   <section id="publications">
-    <div class="section-label">02 · Research</div>
-    <h2 class="section-title">Publi<em>cations</em></h2>
+    <div class="section-label">02 ·</div>
+    <h2 class="section-title">Research<em> Publications</em></h2>
     <div class="pub-list">
 
       <div class="pub-item">
@@ -795,101 +802,53 @@
 
   <!-- Projects -->
   <section id="projects">
-    <div class="section-label">03 · Work</div>
-    <h2 class="section-title">Pro<em>jects</em></h2>
+    <div class="section-label">03 ·</div>
+    <h2 class="section-title">Selected<em> Projects</em></h2>
     <div class="projects-grid">
 
       <div class="proj-card">
         <div class="proj-id">PRJ-001</div>
-        <div class="proj-title">Oragami Manipulator Array</div>
+        <div class="proj-title">Origami Manipulator Array</div>
         <div class="proj-desc">
-          A Python framework for co-evolving robot controllers and morphologies
-          in simulated swarm environments. Supports heterogeneous populations
-          with configurable selection pressures and environmental challenges.
+          An array of three-degree-of-freedom robotic tile forming one continuous manipulation surface. Coupling the
+          actuators through the flexible layer lets it move objects using far fewer
+          actuators than conventional high-density arrays. I wokred as the prinicpal designer on this project, working on all aspects of hardware and software.
         </div>
         <div class="proj-tags">
-          <span class="proj-tag">Multi-Robot Systems</span>
+          <span class="proj-tag">Distributed Manipulation</span>
+          <span class="proj-tag">Soft Robotics</span>
           <span class="proj-tag">Hardware Design</span>
-          <span class="proj-tag">C++</span>
-          <span class="proj-tag">Python</span>
-          <span class="proj-tag">Simulation</span>
+          <span class="proj-tag">Origami</span>
         </div>
       </div>
 
       <div class="proj-card">
         <div class="proj-id">PRJ-002</div>
-        <div class="proj-title">Neural Cellular Automita Chess</div>
+        <div class="proj-title">Neural Cellular Automata Chess</div>
         <div class="proj-desc">
-          Real-time tooling for measuring order parameters and susceptibility
-          in robot swarm experiments — detecting signatures of self-organised
-          criticality across distributed sensor networks.
+			A Chess board where each of the squares is a neural network, that only communicates with its neighbours. 
+			Can the global best position be determined from purely local information. Variants trained to imitate high rated players (LiChess Data) or trained through self play.
         </div>
         <div class="proj-tags">
-          <span class="proj-tag">Neural Cellular Automita</span>
-          <span class="proj-tag">Decentralizaiton</span>
+          <span class="proj-tag">Neural Cellular Automata</span>
+          <span class="proj-tag">Decentralization</span>
           <span class="proj-tag">Python</span>
         </div>
       </div>
 
       <div class="proj-card">
         <div class="proj-id">PRJ-003</div>
-        <div class="proj-title">Vison Language Action</div>
+        <div class="proj-title">Automated Cell Incubator</div>
         <div class="proj-desc">
-          Physical robot arena with 12 e-puck robots running on-board
-          evolutionary algorithms. Enables study of open-ended evolution
-          in hardware under realistic energy and communication constraints.
+			As part of my previous Bioengineering work, I worked with a group of friends to create an automated cell incubator. Automated environmental control (temp, C02, ect) and media exchange.
         </div>
         <div class="proj-tags">
-          <span class="proj-tag">Hardware</span>
-          <span class="proj-tag">e-puck</span>
-          <span class="proj-tag">Embedded Systems</span>
+          <span class="proj-tag">Cell Biology</span>
+          <span class="proj-tag">Lab Automation</span>
+          <span class="proj-tag">Embedded</span>
         </div>
       </div>
 
-      <div class="proj-card">
-        <div class="proj-id">PRJ-004</div>
-        <div class="proj-title">Neural Developmental Encoding</div>
-        <div class="proj-desc">
-          Investigating developmental encodings for robot neural architectures,
-          inspired by biological gene regulatory networks. Enables compact
-          genotype representations that generalise across morphologies.
-        </div>
-        <div class="proj-tags">
-          <span class="proj-tag">Neural Networks</span>
-          <span class="proj-tag">Developmental Biology</span>
-          <span class="proj-tag">Neuroevolution</span>
-        </div>
-      </div>
-
-      <div class="proj-card">
-        <div class="proj-id">PRJ-005</div>
-        <div class="proj-title">Open-Ended Ecology Simulator</div>
-        <div class="proj-desc">
-          A multi-agent simulation platform for studying ecological dynamics
-          in artificial environments — predator-prey coevolution, niche
-          construction, and the emergence of cooperation.
-        </div>
-        <div class="proj-tags">
-          <span class="proj-tag">Artificial Life</span>
-          <span class="proj-tag">Agent-Based Modelling</span>
-          <span class="proj-tag">Julia</span>
-        </div>
-      </div>
-
-      <div class="proj-card">
-        <div class="proj-id">PRJ-006</div>
-        <div class="proj-title">This Website</div>
-        <div class="proj-desc">
-          A personal portfolio built with vanilla HTML/CSS/JS. The background
-          simulates a stochastic spreading process on a hexagonal lattice —
-          a nod to criticality research and the beauty of complex systems.
-        </div>
-        <div class="proj-tags">
-          <span class="proj-tag">HTML/CSS</span>
-          <span class="proj-tag">Canvas API</span>
-          <span class="proj-tag">Criticality</span>
-        </div>
-      </div>
 
     </div>
   </section>
@@ -898,8 +857,11 @@
 
   <!-- Interests -->
   <section id="interests">
-    <div class="section-label">04 · Beyond the Lab</div>
-    <h2 class="section-title">Inter<em>ests</em></h2>
+    <div class="section-label">04 · </div>
+    <h2 class="section-title">Beyond<em> Research</em></h2>
+    <p class="section-intro">
+      The world is a wide and interesting place. Beyond my published work, these are some of the areas I find myself thinking about. I would love to get the chance to explore them in more detial.
+    </p>
     <div class="interests-grid">
 
       <div class="interest-card">
@@ -920,10 +882,10 @@
 
       <div class="interest-card">
         <div class="interest-icon">
-          <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.5 3.8 5.6 3.8 9s-1.3 6.5-3.8 9c-2.5-2.5-3.8-5.6-3.8-9s1.3-6.5 3.8-9z"/></svg>
         </div>
-        <div class="interest-name">Artificial Intelligence</div>
-        <div class="interest-desc">Reinforcement learning, large language models, and the hard questions around understanding, agency, and consciousness.</div>
+        <div class="interest-name">World Models</div>
+        <div class="interest-desc">Learned internal simulations of an environment — how agents build predictive representations of the world to imagine, plan, and act before touching reality.</div>
       </div>
 
       <div class="interest-card">
@@ -941,14 +903,13 @@
 
   <!-- Contact -->
   <section id="contact">
-    <div class="section-label">05 · Connect</div>
+    <div class="section-label">05 ·</div>
     <h2 class="section-title">Get in <em>Touch</em></h2>
     <div class="contact-inner">
       <div>
         <p class="contact-text">
-          I am always open to conversations about robotics research, collaboration
-          opportunities, PhD supervision questions, or just interesting ideas at the
-          boundary of biology, computation, and complexity.<br/><br/>
+          I am always open to talking about robotics research, collaboration
+          opportunities, or just interesting ideas.<br/><br/>
           The best way to reach me is email or LinkedIn.
         </p>
       </div>
@@ -968,7 +929,7 @@
           </div>
           <div>
             <div class="contact-link-label">LinkedIn</div>
-            <div class="contact-link-value">linkedin.com/in/baileydacre</div>
+            <div class="contact-link-value">linkedin.com/in/bailey-dacre</div>
           </div>
         </a>
         <a href="https://github.com/BDacre/" target="_blank" rel="noopener" class="contact-link-row">
